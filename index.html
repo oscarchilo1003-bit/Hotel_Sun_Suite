@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hotel Sun Suite — Tu descanso ideal en Barranquilla</title>
+<meta name="description" content="Hotel Sun Suite en el corazón de Barranquilla. Habitaciones frescas y elegantes, aire acondicionado y atención personalizada. Reserva por WhatsApp." />
+
+<!-- ============================================================= -->
+<!-- FUENTES -->
+<!-- ============================================================= -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+
+<!-- ============================================================= -->
+<!-- TAILWIND + ICONOS -->
+<!-- ============================================================= -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+          sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        },
+        colors: {
+          // Dorado del "Sun"
+          sun: {
+            50:  '#fbf6ec',
+            100: '#f6ead2',
+            200: '#ecd09c',
+            300: '#e1b568',
+            400: '#d49b3c',
+            500: '#c8962c', // dorado principal
+            600: '#a87a21',
+            700: '#855e1d',
+            800: '#5f441a',
+            900: '#3d2d14',
+          },
+          // Crema / blancos cálidos limpios
+          cream: {
+            50:  '#fdfcf9',
+            100: '#faf7f0',
+            200: '#f3ede1',
+          },
+          // Verde tropical profundo (acento)
+          palm: {
+            500: '#1f7a5f',
+            600: '#176349',
+            700: '#114c38',
+          },
+          ink: '#2b241c', // texto cálido oscuro
+        },
+        boxShadow: {
+          soft: '0 18px 50px -20px rgba(43,36,28,0.28)',
+          lift: '0 28px 70px -28px rgba(43,36,28,0.40)',
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { background:#fdfcf9; color:#2b241c; -webkit-font-smoothing: antialiased; }
+  .font-serif { font-feature-settings: "liga" 1; }
+  ::selection { background:#e1b568; color:#3d2d14; }
+
+  /* Modal del menú */
+  #menu-modal { opacity:0; transition: opacity .2s ease; }
+  #menu-modal.menu-open { opacity:1; }
+  #menu-modal .menu-dialog { transform: translateY(16px) scale(.98); transition: transform .25s cubic-bezier(.2,.7,.2,1); }
+  #menu-modal.menu-open .menu-dialog { transform: translateY(0) scale(1); }
+
+  /* Reveal al hacer scroll — VISIBLE por defecto; solo se oculta si JS activa la animación */
+  .reveal { opacity:1; transform:none; }
+  html.js-anim .reveal { opacity:0; transform: translateY(26px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+  html.js-anim .reveal.in { opacity:1; transform:none; }
+
+  /* Placeholder rayado para imágenes a reemplazar */
+  .img-ph {
+    background:
+      repeating-linear-gradient(45deg, rgba(200,150,44,.10) 0 14px, rgba(200,150,44,.04) 14px 28px),
+      #f3ede1;
+  }
+
+  /* Latido sutil del botón flotante */
+  @keyframes haloPulse { 0%{ box-shadow:0 0 0 0 rgba(37,211,102,.45);} 70%{ box-shadow:0 0 0 16px rgba(37,211,102,0);} 100%{ box-shadow:0 0 0 0 rgba(37,211,102,0);} }
+  .wa-halo { animation: haloPulse 2.6s infinite; }
+
+  .hero-overlay { background: linear-gradient(180deg, rgba(43,36,28,.55) 0%, rgba(43,36,28,.20) 38%, rgba(43,36,28,.62) 100%); }
+  .nav-blur { backdrop-filter: saturate(140%) blur(10px); }
+</style>
+</head>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#3d2d14"/>
+    <circle cx="50" cy="42" r="16" fill="#c8962c"/>
+    <text x="50" y="78" font-family="Georgia, serif" font-size="13" fill="#f6ead2" text-anchor="middle">Sun Suite</text>
+  </svg>
+</template>
+
+<body class="font-sans antialiased">
+
+<!-- ============================================================= -->
+<!-- NAV -->
+<!-- ============================================================= -->
+<header id="nav" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
+  <div class="mx-auto max-w-7xl px-5 sm:px-8">
+    <div class="flex items-center justify-between h-20">
+      <a href="#inicio" class="flex items-center group">
+        <img src="images/logo-sun-suite.jpg" alt="Hotel Sun Suite" class="h-14 sm:h-16 w-auto rounded-xl shadow-soft" />
+      </a>
+
+      <nav class="hidden md:flex items-center gap-9 text-[15px] font-500 nav-links text-ink/85">
+        <a href="#hotel" class="hover:text-sun-600 transition-colors">El Hotel</a>
+        <a href="#habitaciones" class="hover:text-sun-600 transition-colors">Habitaciones</a>
+        <a href="#tour" class="hover:text-sun-600 transition-colors">Tour</a>
+        <a href="#servicios" class="hover:text-sun-600 transition-colors">Servicios</a>
+        <a href="#contacto" class="hover:text-sun-600 transition-colors">Contacto</a>
+      </nav>
+
+      <a href="https://wa.me/573001902833?text=Hola,%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20me%20gustar%C3%ADa%20hacer%20una%20reserva%20en%20el%20Hotel%20Sun%20Suite"
+         target="_blank" rel="noopener"
+         class="hidden sm:inline-flex items-center gap-2 rounded-full bg-palm-500 hover:bg-palm-600 text-white px-5 py-2.5 text-sm font-600 shadow-soft transition-all hover:-translate-y-0.5">
+        <i data-lucide="message-circle" class="w-4 h-4"></i>
+        Reservar Ahora
+      </a>
+
+      <!-- Botón menú móvil -->
+      <button id="menu-btn" aria-label="Abrir menú" aria-expanded="false"
+        class="md:hidden grid place-items-center w-11 h-11 rounded-full bg-white/80 nav-blur text-ink shadow-soft active:scale-95 transition-transform">
+        <i data-lucide="menu" class="w-6 h-6 pointer-events-none"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Panel de menú móvil -->
+  <div id="mobile-menu" class="md:hidden fixed inset-0 z-[60] invisible opacity-0 transition-opacity duration-300">
+    <div id="menu-backdrop" class="absolute inset-0 bg-ink/55 backdrop-blur-sm"></div>
+    <nav class="absolute top-0 right-0 h-full w-[78%] max-w-xs bg-cream-50 shadow-lift translate-x-full transition-transform duration-300 flex flex-col p-7" id="menu-panel">
+      <div class="flex items-center justify-between mb-10">
+        <img src="images/logo-sun-suite.jpg" alt="Hotel Sun Suite" class="h-12 w-auto rounded-lg" />
+        <button id="menu-close" aria-label="Cerrar menú" class="grid place-items-center w-10 h-10 rounded-full hover:bg-cream-200 text-ink transition-colors">
+          <i data-lucide="x" class="w-6 h-6 pointer-events-none"></i>
+        </button>
+      </div>
+      <a href="#hotel" class="menu-link py-3.5 text-lg font-500 text-ink border-b border-cream-200">El Hotel</a>
+      <a href="#habitaciones" class="menu-link py-3.5 text-lg font-500 text-ink border-b border-cream-200">Habitaciones</a>
+      <a href="#tour" class="menu-link py-3.5 text-lg font-500 text-ink border-b border-cream-200">Tour en video</a>
+      <a href="#servicios" class="menu-link py-3.5 text-lg font-500 text-ink border-b border-cream-200">Servicios</a>
+      <a href="#contacto" class="menu-link py-3.5 text-lg font-500 text-ink border-b border-cream-200">Contacto</a>
+      <a href="https://wa.me/573001902833?text=Hola,%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20me%20gustar%C3%ADa%20hacer%20una%20reserva%20en%20el%20Hotel%20Sun%20Suite"
+         target="_blank" rel="noopener"
+         class="menu-link mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-palm-500 text-white px-6 py-3.5 font-600 shadow-soft">
+        <i data-lucide="message-circle" class="w-5 h-5"></i>
+        Reservar Ahora
+      </a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============================================================= -->
+<!-- HERO -->
+<!-- ============================================================= -->
+<section id="inicio" class="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-sun-900">
+  <div class="absolute inset-0 z-0 pointer-events-none" style="background:radial-gradient(120% 90% at 50% 0%, #5f441a 0%, #3d2d14 55%, #2b1f0e 100%)"></div>
+  <!-- FOTO HERO: lobby del Hotel Sun Suite -->
+  <img src="images/lobby-hero.jpg" alt="Lobby del Hotel Sun Suite" class="absolute inset-0 z-0 w-full h-full object-cover" />
+  <div class="absolute inset-0 hero-overlay z-[1] pointer-events-none"></div>
+
+  <div class="relative z-10 mx-auto max-w-4xl px-6 text-center text-cream-50">
+    <p class="reveal text-sun-200 uppercase tracking-[0.4em] text-xs sm:text-sm mb-5">Bienvenido a Barranquilla</p>
+    <h1 class="reveal font-serif text-[2.7rem] leading-[1.05] sm:text-6xl lg:text-7xl font-600 mb-6 text-balance">
+      Tu descanso ideal en el<br class="hidden sm:block" /> corazón de Barranquilla
+    </h1>
+    <p class="reveal mx-auto max-w-xl text-base sm:text-lg text-cream-100/90 mb-9 text-pretty">
+      Habitaciones frescas y elegantes, aire acondicionado y la calidez caribeña que mereces.
+      Vive una estadía cómoda a pasos de todo.
+    </p>
+    <div class="reveal flex flex-col sm:flex-row items-center justify-center gap-3.5">
+      <a href="https://wa.me/573001902833?text=Hola,%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20me%20gustar%C3%ADa%20hacer%20una%20reserva%20en%20el%20Hotel%20Sun%20Suite"
+         target="_blank" rel="noopener"
+         class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-full bg-sun-500 hover:bg-sun-400 text-ink px-8 py-4 text-base font-700 shadow-lift transition-all hover:-translate-y-0.5">
+        <i data-lucide="message-circle" class="w-5 h-5"></i>
+        Reservar Ahora
+      </a>
+      <a href="#habitaciones"
+         class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-cream-50/50 hover:border-cream-50 text-cream-50 px-8 py-4 text-base font-500 transition-all hover:bg-white/10">
+        Ver habitaciones
+        <i data-lucide="arrow-down" class="w-4 h-4"></i>
+      </a>
+    </div>
+  </div>
+
+  <a href="#hotel" class="absolute bottom-7 left-1/2 -translate-x-1/2 z-10 text-cream-50/80 hover:text-cream-50 transition-colors">
+    <i data-lucide="chevron-down" class="w-7 h-7 animate-bounce"></i>
+  </a>
+</section>
+
+<!-- ============================================================= -->
+<!-- SOBRE NOSOTROS / EL HOTEL -->
+<!-- ============================================================= -->
+<section id="hotel" class="py-24 sm:py-32 bg-cream-50">
+  <div class="mx-auto max-w-7xl px-5 sm:px-8">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div class="reveal relative">
+        <!-- FOTO: recepción del Hotel Sun Suite -->
+        <img src="images/recepcion.jpg" alt="Recepción del Hotel Sun Suite"
+             class="w-full h-[420px] sm:h-[520px] object-cover rounded-[1.75rem] shadow-soft" />
+        <div class="absolute -bottom-6 -right-4 sm:-right-6 bg-white rounded-2xl shadow-lift px-6 py-5 max-w-[200px]">
+          <p class="font-serif text-4xl font-700 text-sun-600 leading-none">100%</p>
+          <p class="mt-1 text-sm text-ink/70 leading-snug">Comodidad y atención personalizada</p>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <p class="uppercase tracking-[0.32em] text-xs text-sun-600 mb-4">Sobre nosotros</p>
+        <h2 class="font-serif text-4xl sm:text-5xl font-600 leading-tight mb-6 text-balance">
+          Un refugio cálido, fresco y elegante
+        </h2>
+        <p class="text-lg text-ink/75 leading-relaxed mb-5 text-pretty">
+          En <strong class="font-600 text-ink">Hotel Sun Suite</strong> combinamos la energía vibrante de Barranquilla
+          con espacios diseñados para tu descanso. Cada rincón está pensado para que te sientas
+          como en casa: ambientes limpios, frescos y una atención que marca la diferencia.
+        </p>
+        <p class="text-lg text-ink/75 leading-relaxed mb-9 text-pretty">
+          Ya sea por trabajo o placer, encontrarás la tranquilidad que buscas a pocos minutos
+          de los principales puntos de la ciudad.
+        </p>
+
+        <div class="grid sm:grid-cols-3 gap-5">
+          <div class="flex flex-col gap-2">
+            <i data-lucide="wind" class="w-7 h-7 text-palm-500"></i>
+            <span class="font-600">Siempre fresco</span>
+            <span class="text-sm text-ink/60">Aire acondicionado en todas las habitaciones</span>
+          </div>
+          <div class="flex flex-col gap-2">
+            <i data-lucide="map-pin" class="w-7 h-7 text-palm-500"></i>
+            <span class="font-600">Ubicación ideal</span>
+            <span class="text-sm text-ink/60">En el corazón de Barranquilla</span>
+          </div>
+          <div class="flex flex-col gap-2">
+            <i data-lucide="heart-handshake" class="w-7 h-7 text-palm-500"></i>
+            <span class="font-600">Atención cálida</span>
+            <span class="text-sm text-ink/60">Recepción atenta a cada detalle</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- HABITACIONES Y SUITES -->
+<!-- ============================================================= -->
+<section id="habitaciones" class="py-24 sm:py-32 bg-white">
+  <div class="mx-auto max-w-7xl px-5 sm:px-8">
+    <div class="reveal text-center max-w-2xl mx-auto mb-14">
+      <p class="uppercase tracking-[0.32em] text-xs text-sun-600 mb-4">Habitaciones &amp; Suites</p>
+      <h2 class="font-serif text-4xl sm:text-5xl font-600 leading-tight mb-5 text-balance">
+        Espacios pensados para tu comodidad
+      </h2>
+      <p class="text-lg text-ink/70 text-pretty">
+        Elige la opción perfecta para tu estadía. Todas incluyen aire acondicionado, Wi-Fi y baño privado. Tarifas desde <strong class="text-sun-600 font-600">$140.000</strong> por noche.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+
+      <!-- TARJETA: HABITACIÓN SENCILLA -->
+      <article class="reveal group rounded-3xl overflow-hidden bg-cream-50 shadow-soft hover:shadow-lift transition-all duration-500 hover:-translate-y-1">
+        <div class="relative overflow-hidden">
+          <!-- FOTO: Habitación Sencilla -->
+          <img src="images/hab-sencilla.jpg" alt="Habitación Sencilla" class="h-64 w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          <span class="absolute top-4 right-4 z-[2] bg-white/95 text-ink text-sm font-700 px-3 py-1.5 rounded-full shadow-soft pointer-events-none">$140.000 <span class="font-500 text-ink/55">/ noche</span></span>
+        </div>
+        <div class="p-7">
+          <h3 class="font-serif text-2xl font-600 mb-2">Habitación Sencilla</h3>
+          <p class="text-ink/65 text-[15px] leading-relaxed mb-5">Elegante y acogedora, con cabecero de diseño, clóset amplio y zona de trabajo. Ideal para el viajero que llega solo.</p>
+          <div class="flex items-center gap-4 text-sm text-ink/60 mb-6">
+            <span class="inline-flex items-center gap-1.5"><i data-lucide="users" class="w-4 h-4 text-palm-500"></i> 1–2 personas</span>
+            <span class="inline-flex items-center gap-1.5"><i data-lucide="briefcase" class="w-4 h-4 text-palm-500"></i> Zona de trabajo</span>
+          </div>
+          <a href="https://wa.me/573001902833?text=Hola%2C%20me%20gustar%C3%ADa%20reservar%20una%20Habitaci%C3%B3n%20Sencilla%20en%20el%20Hotel%20Sun%20Suite"
+             target="_blank" rel="noopener"
+             class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-palm-500 hover:bg-palm-600 text-white py-3 font-600 text-sm transition-colors">
+            Reservar esta habitación
+          </a>
+        </div>
+      </article>
+
+      <!-- TARJETA: HABITACIÓN DOBLE -->
+      <article class="reveal group rounded-3xl overflow-hidden bg-cream-50 shadow-soft hover:shadow-lift transition-all duration-500 hover:-translate-y-1 ring-2 ring-sun-400">
+        <div class="relative overflow-hidden">
+          <!-- FOTO: Habitación Doble -->
+          <img src="images/hab-doble.jpg" alt="Habitación Doble" class="h-64 w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          <span class="absolute top-4 left-4 z-[2] bg-sun-500 text-ink text-xs font-700 uppercase tracking-wider px-3 py-1.5 rounded-full pointer-events-none">Más popular</span>
+          <span class="absolute top-4 right-4 z-[2] bg-white/95 text-ink text-sm font-700 px-3 py-1.5 rounded-full shadow-soft pointer-events-none">$160.000 <span class="font-500 text-ink/55">/ noche</span></span>
+        </div>
+        <div class="p-7">
+          <h3 class="font-serif text-2xl font-600 mb-2">Habitación Doble</h3>
+          <p class="text-ink/65 text-[15px] leading-relaxed mb-5">Espaciosa y fresca, con <strong class="text-ink/80 font-600">dos camas sencillas</strong> y todas las comodidades. Perfecta para dos personas o amigos.</p>
+          <div class="flex items-center gap-4 text-sm text-ink/60 mb-6">
+            <span class="inline-flex items-center gap-1.5"><i data-lucide="users" class="w-4 h-4 text-palm-500"></i> 2 personas</span>
+            <span class="inline-flex items-center gap-1.5"><i data-lucide="bed" class="w-4 h-4 text-palm-500"></i> 2 camas sencillas</span>
+          </div>
+          <a href="https://wa.me/573001902833?text=Hola%2C%20me%20gustar%C3%ADa%20reservar%20una%20Habitaci%C3%B3n%20Doble%20en%20el%20Hotel%20Sun%20Suite"
+             target="_blank" rel="noopener"
+             class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-palm-500 hover:bg-palm-600 text-white py-3 font-600 text-sm transition-colors">
+            Reservar esta habitación
+          </a>
+        </div>
+      </article>
+
+      <!-- TARJETA: HABITACIÓN TRIPLE -->
+      <article class="reveal group rounded-3xl overflow-hidden bg-cream-50 shadow-soft hover:shadow-lift transition-all duration-500 hover:-translate-y-1">
+        <div class="relative overflow-hidden">
+          <!-- FOTO: Habitación Triple -->
+          <img src="images/hab-triple.jpg" alt="Habitación Triple del Hotel Sun Suite"
+               class="h-64 w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          <span class="absolute top-4 right-4 z-[2] bg-white/95 text-ink text-sm font-700 px-3 py-1.5 rounded-full shadow-soft pointer-events-none">$210.000 <span class="font-500 text-ink/55">/ noche</span></span>
+        </div>
+        <div class="p-7">
+          <h3 class="font-serif text-2xl font-600 mb-2">Habitación Triple</h3>
+          <p class="text-ink/65 text-[15px] leading-relaxed mb-5">Amplia y versátil, con <strong class="text-ink/80 font-600">tres camas sencillas</strong> y espacio de sobra. Ideal para familias o grupos de amigos.</p>
+          <div class="flex items-center gap-4 text-sm text-ink/60 mb-6">
+            <span class="inline-flex items-center gap-1.5"><i data-lucide="users" class="w-4 h-4 text-palm-500"></i> 3 personas</span>
+            <span class="inline-flex items-center gap-1.5"><i data-lucide="bed" class="w-4 h-4 text-palm-500"></i> 3 camas sencillas</span>
+          </div>
+          <a href="https://wa.me/573001902833?text=Hola%2C%20me%20gustar%C3%ADa%20reservar%20una%20Habitaci%C3%B3n%20Triple%20en%20el%20Hotel%20Sun%20Suite"
+             target="_blank" rel="noopener"
+             class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-palm-500 hover:bg-palm-600 text-white py-3 font-600 text-sm transition-colors">
+            Reservar esta habitación
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- TOUR EN VIDEO -->
+<!-- ============================================================= -->
+<section id="tour" class="py-24 sm:py-32 bg-cream-100 relative overflow-hidden">
+  <div class="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-sun-200/40 blur-3xl"></div>
+  <div class="mx-auto max-w-7xl px-5 sm:px-8 relative">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div class="reveal">
+        <p class="uppercase tracking-[0.32em] text-xs text-sun-600 mb-4">Tour en video</p>
+        <h2 class="font-serif text-4xl sm:text-5xl font-600 leading-tight mb-5 text-balance">
+          Vive la experiencia antes de llegar
+        </h2>
+        <p class="text-lg text-ink/75 leading-relaxed mb-7 text-pretty">
+          Recorre nuestros espacios y descubre la comodidad, el diseño y la frescura
+          que te esperan en el Hotel Sun Suite. Así de bien vas a descansar.
+        </p>
+        <a href="https://wa.me/573001902833?text=Hola%2C%20vi%20el%20video%20de%20la%20p%C3%A1gina%20y%20me%20gustar%C3%ADa%20hacer%20una%20reserva%20en%20el%20Hotel%20Sun%20Suite"
+           target="_blank" rel="noopener"
+           class="inline-flex items-center justify-center gap-2.5 rounded-full bg-palm-500 hover:bg-palm-600 text-white px-7 py-3.5 font-600 shadow-soft transition-all hover:-translate-y-0.5">
+          <i data-lucide="message-circle" class="w-5 h-5"></i>
+          Me gustó, quiero reservar
+        </a>
+      </div>
+
+      <div class="reveal flex justify-center">
+        <div class="relative w-full max-w-[340px] rounded-[2rem] overflow-hidden shadow-lift bg-ink">
+          <!-- VIDEO: tour del hotel -->
+          <video id="tour-video" class="w-full h-auto block" playsinline loop muted preload="metadata"
+                 poster="images/hab-doble.jpg">
+            <source src="images/tour.mp4" type="video/mp4" />
+            Tu navegador no soporta video.
+          </video>
+          <!-- Botón play/pausa -->
+          <button id="tour-toggle" aria-label="Reproducir video"
+            class="absolute inset-0 grid place-items-center bg-ink/25 transition-opacity">
+            <span class="grid place-items-center w-16 h-16 rounded-full bg-white/90 text-ink shadow-lift">
+              <i data-lucide="play" class="w-7 h-7 translate-x-0.5"></i>
+            </span>
+          </button>
+          <!-- Botón sonido -->
+          <button id="tour-sound" aria-label="Activar sonido"
+            class="absolute bottom-4 right-4 grid place-items-center w-11 h-11 rounded-full bg-ink/55 backdrop-blur-sm text-white opacity-0 transition-opacity">
+            <i data-lucide="volume-x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- SERVICIOS / AMENITIES -->
+<section id="servicios" class="py-24 sm:py-32 bg-sun-900 text-cream-50 relative overflow-hidden">
+  <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-sun-700/40 blur-3xl"></div>
+  <div class="mx-auto max-w-7xl px-5 sm:px-8 relative">
+    <div class="reveal text-center max-w-2xl mx-auto mb-14">
+      <p class="uppercase tracking-[0.32em] text-xs text-sun-200 mb-4">Servicios</p>
+      <h2 class="font-serif text-4xl sm:text-5xl font-600 leading-tight mb-5 text-balance">
+        Todo lo que necesitas para una estadía perfecta
+      </h2>
+    </div>
+
+    <div class="reveal grid grid-cols-2 lg:grid-cols-4 gap-5">
+      <!-- cada amenity -->
+      <div class="flex flex-col items-center text-center gap-3 rounded-2xl bg-white/[0.06] hover:bg-white/[0.1] transition-colors p-7">
+        <i data-lucide="wind" class="w-9 h-9 text-sun-300"></i>
+        <span class="font-600">Aire Acondicionado</span>
+        <span class="text-sm text-cream-100/60">Fresco en cada rincón, todo el día.</span>
+      </div>
+      <div class="flex flex-col items-center text-center gap-3 rounded-2xl bg-white/[0.06] hover:bg-white/[0.1] transition-colors p-7">
+        <i data-lucide="wifi" class="w-9 h-9 text-sun-300"></i>
+        <span class="font-600">Wi-Fi Gratis</span>
+        <span class="text-sm text-cream-100/60">Internet rápido en todo el hotel.</span>
+      </div>
+      <div class="flex flex-col items-center text-center gap-3 rounded-2xl bg-white/[0.06] hover:bg-white/[0.1] transition-colors p-7">
+        <i data-lucide="concierge-bell" class="w-9 h-9 text-sun-300"></i>
+        <span class="font-600">Recepción</span>
+        <span class="text-sm text-cream-100/60">Atención atenta y servicial.</span>
+      </div>
+      <div class="flex flex-col items-center text-center gap-3 rounded-2xl bg-white/[0.06] hover:bg-white/[0.1] transition-colors p-7">
+        <i data-lucide="shield-check" class="w-9 h-9 text-sun-300"></i>
+        <span class="font-600">Seguridad</span>
+        <span class="text-sm text-cream-100/60">Tu tranquilidad es prioridad.</span>
+      </div>
+      <div class="flex flex-col items-center text-center gap-3 rounded-2xl bg-white/[0.06] hover:bg-white/[0.1] transition-colors p-7">
+        <i data-lucide="bath" class="w-9 h-9 text-sun-300"></i>
+        <span class="font-600">Baño Privado</span>
+        <span class="text-sm text-cream-100/60">Agua caliente y amenidades.</span>
+      </div>
+      <div class="flex flex-col items-center text-center gap-3 rounded-2xl bg-white/[0.06] hover:bg-white/[0.1] transition-colors p-7">
+        <i data-lucide="tv" class="w-9 h-9 text-sun-300"></i>
+        <span class="font-600">TV / Cable</span>
+        <span class="text-sm text-cream-100/60">Entretenimiento en tu habitación.</span>
+      </div>
+      <div class="flex flex-col items-center text-center gap-3 rounded-2xl bg-white/[0.06] hover:bg-white/[0.1] transition-colors p-7">
+        <i data-lucide="utensils" class="w-9 h-9 text-sun-300"></i>
+        <span class="font-600">Restaurante</span>
+        <span class="text-sm text-cream-100/60">Cocina mexicana de El Burrito.</span>
+      </div>
+      <div class="flex flex-col items-center text-center gap-3 rounded-2xl bg-white/[0.06] hover:bg-white/[0.1] transition-colors p-7">
+        <i data-lucide="clock" class="w-9 h-9 text-sun-300"></i>
+        <span class="font-600">Check-in Flexible</span>
+        <span class="text-sm text-cream-100/60">Llegada adaptada a tu viaje.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- CAFETERÍA / RESTAURANTE -->
+<!-- ============================================================= -->
+<section class="py-20 sm:py-28 bg-cream-50">
+  <div class="mx-auto max-w-7xl px-5 sm:px-8">
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <div class="reveal order-2 lg:order-1">
+        <p class="uppercase tracking-[0.32em] text-xs text-sun-600 mb-4">Restaurante</p>
+        <h2 class="font-serif text-4xl sm:text-5xl font-600 leading-tight mb-5 text-balance">
+          Buena mesa, sin salir del hotel
+        </h2>
+        <p class="text-lg text-ink/75 leading-relaxed mb-6 text-pretty">
+          Disfruta de la cocina mexicana de <strong class="font-600">El Burrito</strong>,
+          nuestro restaurante aliado: tacos, burritos y mucho más a pocos pasos de tu habitación.
+        </p>
+        <ul class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink/70 mb-7">
+          <li class="inline-flex items-center gap-2"><i data-lucide="utensils" class="w-4 h-4 text-palm-500"></i> Cocina mexicana</li>
+          <li class="inline-flex items-center gap-2"><i data-lucide="flame" class="w-4 h-4 text-palm-500"></i> Tacos &amp; burritos</li>
+          <li class="inline-flex items-center gap-2"><i data-lucide="wine" class="w-4 h-4 text-palm-500"></i> Bar &amp; bebidas</li>
+        </ul>
+        <div class="flex flex-wrap items-center gap-3">
+          <button type="button" onclick="openMenu()"
+             class="inline-flex items-center gap-2.5 rounded-full bg-palm-500 text-cream-50 font-600 text-sm px-6 py-3 hover:bg-palm-600 transition-colors">
+            <i data-lucide="book-open" class="w-4 h-4"></i> Ver menú
+          </button>
+          <a href="https://www.instagram.com/elburritobaq?utm_source=ig_web_button_share_sheet&amp;igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2.5 rounded-full bg-ink text-cream-50 font-600 text-sm px-6 py-3 hover:bg-ink/90 transition-colors">
+            <i data-lucide="instagram" class="w-4 h-4"></i> Síguenos en Instagram
+          </a>
+        </div>
+      </div>
+      <div class="reveal order-1 lg:order-2">
+        <!-- FOTO: cafetería / restaurante El Burrito -->
+        <img src="images/el-burrito.jpg" alt="Restaurante El Burrito, cocina mexicana"
+             class="w-full h-[340px] sm:h-[440px] object-cover rounded-[1.75rem] shadow-soft" />
+      </div>
+    </div>
+
+    <!-- MODAL MENÚ EL BURRITO -->
+    <div id="menu-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 sm:p-6">
+      <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" onclick="closeMenu()"></div>
+      <div class="menu-dialog relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-[1.5rem] bg-white shadow-lift">
+        <button type="button" onclick="closeMenu()" aria-label="Cerrar"
+          class="absolute top-3 right-3 z-10 grid place-items-center w-10 h-10 rounded-full bg-white/90 hover:bg-white text-ink shadow-soft transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <img src="images/menu-el-burrito.png" alt="Menú El Burrito — Hotel Sun Suite"
+             class="w-full h-auto block rounded-[1.5rem]" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- CTA BAND -->
+<!-- ============================================================= -->
+<section class="py-20 sm:py-24 bg-cream-100">
+  <div class="reveal mx-auto max-w-4xl px-6 text-center">
+    <h2 class="font-serif text-4xl sm:text-5xl font-600 leading-tight mb-5 text-balance">
+      ¿Listo para tu próxima estadía?
+    </h2>
+    <p class="text-lg text-ink/70 mb-9 max-w-xl mx-auto text-pretty">
+      Escríbenos por WhatsApp y reserva en minutos. Te ayudamos a elegir la habitación perfecta.
+    </p>
+    <a href="https://wa.me/573001902833?text=Hola,%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20me%20gustar%C3%ADa%20hacer%20una%20reserva%20en%20el%20Hotel%20Sun%20Suite"
+       target="_blank" rel="noopener"
+       class="inline-flex items-center justify-center gap-2.5 rounded-full bg-sun-500 hover:bg-sun-400 text-ink px-9 py-4 text-base font-700 shadow-lift transition-all hover:-translate-y-0.5">
+      <i data-lucide="message-circle" class="w-5 h-5"></i>
+      Cotizar mi habitación
+    </a>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- CONTACTO Y UBICACIÓN -->
+<!-- ============================================================= -->
+<section id="contacto" class="py-24 sm:py-32 bg-cream-50">
+  <div class="mx-auto max-w-7xl px-5 sm:px-8">
+    <div class="grid lg:grid-cols-2 gap-12 items-stretch">
+      <div class="reveal">
+        <p class="uppercase tracking-[0.32em] text-xs text-sun-600 mb-4">Contacto &amp; Ubicación</p>
+        <h2 class="font-serif text-4xl sm:text-5xl font-600 leading-tight mb-8 text-balance">
+          Estamos para recibirte
+        </h2>
+
+        <ul class="space-y-6">
+          <li class="flex items-start gap-4">
+            <span class="grid place-items-center w-11 h-11 rounded-full bg-sun-100 text-sun-600 shrink-0"><i data-lucide="map-pin" class="w-5 h-5"></i></span>
+            <div>
+              <p class="font-600">Dirección</p>
+              <!-- REEMPLAZAR CON LA DIRECCIÓN EXACTA DEL HOTEL -->
+              <p class="text-ink/70">Barranquilla, Atlántico, Colombia</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-4">
+            <span class="grid place-items-center w-11 h-11 rounded-full bg-sun-100 text-sun-600 shrink-0"><i data-lucide="phone" class="w-5 h-5"></i></span>
+            <div>
+              <p class="font-600">Teléfono / WhatsApp</p>
+              <a href="https://wa.me/573001902833?text=Hola,%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20me%20gustar%C3%ADa%20hacer%20una%20reserva%20en%20el%20Hotel%20Sun%20Suite" target="_blank" rel="noopener" class="text-palm-600 hover:text-palm-700 font-500">+57 300 190 2833</a>
+            </div>
+          </li>
+          <li class="flex items-start gap-4">
+            <span class="grid place-items-center w-11 h-11 rounded-full bg-sun-100 text-sun-600 shrink-0"><i data-lucide="clock" class="w-5 h-5"></i></span>
+            <div>
+              <p class="font-600">Recepción</p>
+              <p class="text-ink/70">Atención todos los días</p>
+            </div>
+          </li>
+        </ul>
+
+        <a href="https://wa.me/573001902833?text=Hola,%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20me%20gustar%C3%ADa%20hacer%20una%20reserva%20en%20el%20Hotel%20Sun%20Suite"
+           target="_blank" rel="noopener"
+           class="mt-10 inline-flex items-center justify-center gap-2.5 rounded-full bg-palm-500 hover:bg-palm-600 text-white px-7 py-3.5 font-600 shadow-soft transition-all hover:-translate-y-0.5">
+          <i data-lucide="message-circle" class="w-5 h-5"></i>
+          Escríbenos por WhatsApp
+        </a>
+      </div>
+
+      <div class="reveal rounded-[1.75rem] overflow-hidden shadow-soft min-h-[360px] bg-cream-200">
+        <!-- REEMPLAZAR CON EL MAPA EXACTO: copia el iframe de Google Maps de la ubicación del hotel -->
+        <iframe
+          title="Ubicación Hotel Sun Suite"
+          src="https://www.google.com/maps?q=Barranquilla,Atlantico,Colombia&output=embed"
+          class="w-full h-full min-h-[360px] border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- FOOTER -->
+<!-- ============================================================= -->
+<footer class="bg-ink text-cream-100/80">
+  <div class="mx-auto max-w-7xl px-5 sm:px-8 py-14">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
+      <div class="flex items-center gap-3">
+        <img src="images/logo-sun-suite.jpg" alt="Hotel Sun Suite" class="h-16 w-auto rounded-xl" />
+      </div>
+      <nav class="flex flex-wrap gap-x-8 gap-y-3 text-sm">
+        <a href="#hotel" class="hover:text-sun-300 transition-colors">El Hotel</a>
+        <a href="#habitaciones" class="hover:text-sun-300 transition-colors">Habitaciones</a>
+        <a href="#servicios" class="hover:text-sun-300 transition-colors">Servicios</a>
+        <a href="#contacto" class="hover:text-sun-300 transition-colors">Contacto</a>
+      </nav>
+    </div>
+    <div class="mt-10 pt-7 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-cream-100/55">
+      <p>© <span id="year"></span> Hotel Sun Suite. Todos los derechos reservados.</p>
+      <p>Hecho con cariño caribeño en Barranquilla 🌴</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================= -->
+<!-- BOTÓN FLOTANTE WHATSAPP -->
+<!-- ============================================================= -->
+<a href="https://wa.me/573001902833?text=Hola,%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20me%20gustar%C3%ADa%20hacer%20una%20reserva%20en%20el%20Hotel%20Sun%20Suite"
+   target="_blank" rel="noopener" aria-label="Reservar por WhatsApp"
+   class="fixed bottom-5 right-5 z-50 group flex items-center gap-3">
+  <span class="hidden sm:block bg-white text-ink text-sm font-600 px-4 py-2 rounded-full shadow-lift opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">Reserva por WhatsApp</span>
+  <span class="wa-halo grid place-items-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#25D366] text-white shadow-lift transition-transform group-hover:scale-105">
+    <svg viewBox="0 0 24 24" class="w-7 h-7 sm:w-8 sm:h-8" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.87 9.87 0 001.611 5.367l-.999 3.648 3.877-1.014zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+  </span>
+</a>
+
+<!-- ============================================================= -->
+<!-- SCRIPTS -->
+<!-- ============================================================= -->
+<script>
+  // Iconos
+  lucide.createIcons();
+
+  // Modal del menú
+  const menuModal = document.getElementById('menu-modal');
+  function openMenu() {
+    menuModal.classList.remove('hidden');
+    menuModal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => menuModal.classList.add('menu-open'));
+  }
+  function closeMenu() {
+    menuModal.classList.remove('menu-open');
+    document.body.style.overflow = '';
+    setTimeout(() => { menuModal.classList.add('hidden'); menuModal.classList.remove('flex'); }, 200);
+  }
+  window.openMenu = openMenu;
+  window.closeMenu = closeMenu;
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuModal.classList.contains('flex')) closeMenu();
+  });
+
+  // Año dinámico
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Nav: fondo sólido al hacer scroll
+  const nav = document.getElementById('nav');
+  const logo = document.querySelectorAll('.nav-logo, .nav-sub, .nav-links a');
+  function onScroll() {
+    if (window.scrollY > 40) {
+      nav.classList.add('bg-cream-50/90', 'nav-blur', 'shadow-soft');
+    } else {
+      nav.classList.remove('bg-cream-50/90', 'nav-blur', 'shadow-soft');
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ===== Menú móvil =====
+  (function () {
+    const menu = document.getElementById('mobile-menu');
+    const panel = document.getElementById('menu-panel');
+    const btn = document.getElementById('menu-btn');
+    const closeBtn = document.getElementById('menu-close');
+    const backdrop = document.getElementById('menu-backdrop');
+    if (!menu) return;
+    function open() {
+      menu.classList.remove('invisible', 'opacity-0');
+      requestAnimationFrame(() => panel.classList.remove('translate-x-full'));
+      btn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      panel.classList.add('translate-x-full');
+      menu.classList.add('opacity-0');
+      btn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      setTimeout(() => menu.classList.add('invisible'), 300);
+    }
+    btn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', close);
+    document.querySelectorAll('.menu-link').forEach((a) => a.addEventListener('click', close));
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  })();
+
+  // Reveal on scroll — animación SOLO como mejora; el contenido siempre es visible si falla
+  const reveals = document.querySelectorAll('.reveal');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canAnimate = !reduceMotion && 'IntersectionObserver' in window && window.innerWidth >= 768;
+
+  if (canAnimate) {
+    document.documentElement.classList.add('js-anim');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    reveals.forEach((el) => io.observe(el));
+    // Failsafe: si el observer no dispara en 1s, mostrar todo y desactivar el modo animación.
+    setTimeout(() => {
+      reveals.forEach((el) => el.classList.add('in'));
+      document.documentElement.classList.remove('js-anim');
+    }, 1000);
+  }
+  // En móvil/tablet (o sin soporte) no se oculta nada: todo se ve de inmediato.
+
+  // ===== Video tour =====
+  (function () {
+    const v = document.getElementById('tour-video');
+    const toggle = document.getElementById('tour-toggle');
+    const sound = document.getElementById('tour-sound');
+    if (!v) return;
+    function showPlay(show) {
+      toggle.style.opacity = show ? '1' : '0';
+      toggle.style.pointerEvents = show ? 'auto' : 'none';
+      sound.style.opacity = show ? '0' : '1';
+      sound.style.pointerEvents = show ? 'none' : 'auto';
+    }
+    toggle.addEventListener('click', () => { v.play(); });
+    v.addEventListener('play', () => showPlay(false));
+    v.addEventListener('pause', () => showPlay(true));
+    v.addEventListener('click', () => { if (!v.paused) v.pause(); });
+    sound.addEventListener('click', (e) => {
+      e.stopPropagation();
+      v.muted = !v.muted;
+      sound.querySelector('i').setAttribute('data-lucide', v.muted ? 'volume-x' : 'volume-2');
+      if (window.lucide) lucide.createIcons();
+    });
+    showPlay(true);
+  })();
+</script>
+</body>
+</html>
